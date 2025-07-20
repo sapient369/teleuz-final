@@ -254,46 +254,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   ),
                                 )
                               ],
-                              const DividerSection(),
-                              Semantics(child: const SingleBannerWidget()),
-                              const DividerSection(),
-                              ShowMoreText(isShowMoreVisible: false, headerText: MyStrings.featuredItem, press: () {}),
-                              const SizedBox(height: Dimensions.spaceBetweenCategory),
-                              const FeaturedMovieWidget(),
-                              const SizedBox(height: Dimensions.spaceBetweenCategory),
-                              const DividerSection(topSpace: 10),
-                              ShowMoreRowWidget(
-                                value: MyStrings.ourFreeZone,
-                                isShowMoreVisible: true,
-                                press: () {
-                                  Get.toNamed(RouteHelper.allFreeZoneScreen);
-                                },
-                              ),
-                              const SizedBox(height: Dimensions.spaceBetweenCategory),
-                              const FreeZoneWidget(),
-                              const DividerSection(),
-                              const SecondSingleBannerWidget(),
-                              if (controller.trailerMovieList.isNotEmpty) ...[
-                                Column(
-                                  children: [
-                                    const DividerSection(),
-                                    ShowMoreRowWidget(
-                                        value: MyStrings.latestTrailer, isShowMoreVisible: false, press: () {}),
-                                    const SizedBox(height: Dimensions.spaceBetweenCategory),
-                                    const LatestTrailerWidget(),
-                                  ],
-                                )
-                              ],
-                              const DividerSection(),
-                              ShowMoreText(
-                                isShowMoreVisible: false,
-                                headerText: MyStrings.latestSeries,
-                                press: () {
-                                  Get.toNamed(RouteHelper.allLiveTVScreen);
-                                },
-                              ),
-                              const SizedBox(height: Dimensions.spaceBetweenCategory),
-                              const LatestSeries(),
                             ],
                           ),
                         ),

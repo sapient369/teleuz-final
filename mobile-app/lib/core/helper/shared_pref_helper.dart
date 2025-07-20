@@ -25,4 +25,5 @@ class SharedPreferenceHelper {
   static const String languageImagePath = 'language_image';
   static const String langKey = 'language-key';
   static const String langListKey = 'language-list-key';
+  static const String adultUnlockedKey = 'adult-unlocked';
 }

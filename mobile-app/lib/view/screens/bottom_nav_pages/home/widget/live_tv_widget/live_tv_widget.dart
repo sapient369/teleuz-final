@@ -5,6 +5,8 @@ import '../../../../../../core/route/route.dart';
 import '../../../../../../core/utils/dimensions.dart';
 import '../../../../../../core/utils/url_container.dart';
 import '../../../../../../data/controller/home/home_controller.dart';
+import '../../../../../../data/services/api_service.dart';
+import '../../../../../../core/helper/shared_pref_helper.dart';
 import '../../../../all_live_tv/widget/live_tv_grid_item/live_tv_grid_item.dart';
 import '../../shimmer/live_tv_shimmer.dart';
 
@@ -27,11 +29,16 @@ class _LiveTvWidgetState extends State<LiveTvWidget> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: List.generate(
-                    controller.televisionList.length,
+                    controller.televisionList
+                        .where((e) => !e.isAdult || (Get.find<ApiClient>().sharedPreferences.getBool(SharedPreferenceHelper.adultUnlockedKey) ?? false))
+                        .length,
                     (index) {
+                      final visibleList = controller.televisionList
+                          .where((e) => !e.isAdult || (Get.find<ApiClient>().sharedPreferences.getBool(SharedPreferenceHelper.adultUnlockedKey) ?? false))
+                          .toList();
                       return LiveTvGridItem(
-                        liveTvName: controller.televisionList[index].title?.tr ?? '',
-                        imageUrl: '${UrlContainer.baseUrl}${controller.televisionImagePath}/${controller.televisionList[index].image}',
+                        liveTvName: visibleList[index].name?.tr ?? '',
+                        imageUrl: '${UrlContainer.baseUrl}${controller.televisionImagePath}/${visibleList[index].image}',
                         press: () {
                           if (controller.isAuthorized() == false) {
                             showLoginDialog(context);
