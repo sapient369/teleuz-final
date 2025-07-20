@@ -36,9 +36,14 @@ class _LiveTvWidgetState extends State<LiveTvWidget> {
                       final visibleList = controller.televisionList
                           .where((e) => !e.isAdult || (Get.find<ApiClient>().sharedPreferences.getBool(SharedPreferenceHelper.adultUnlockedKey) ?? false))
                           .toList();
+                      final firstChannel = visibleList[index].channels?.isNotEmpty == true
+                          ? visibleList[index].channels!.first
+                          : null;
                       return LiveTvGridItem(
                         liveTvName: visibleList[index].name?.tr ?? '',
-                        imageUrl: '${UrlContainer.baseUrl}${controller.televisionImagePath}/${visibleList[index].image}',
+                        imageUrl: firstChannel != null
+                            ? '${UrlContainer.baseUrl}${controller.televisionImagePath}/${firstChannel.image}'
+                            : '',
                         press: () {
                           if (controller.isAuthorized() == false) {
                             showLoginDialog(context);
