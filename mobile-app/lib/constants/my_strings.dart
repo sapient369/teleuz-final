@@ -382,6 +382,8 @@ class MyStrings {
   static const String confirm = "Confirm";
   static const String loginFailedTryAgain = 'Login failed,please try again';
   static const String attactmentError = "You can add Maximum 5 attachment";
+  static const String unlockAdult = 'Unlock Adult Content';
+  static const String enterPin = 'Enter PIN';
 
   static RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   static List<MyLanguageModel> myLanguages = [
