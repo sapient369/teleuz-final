@@ -92,7 +92,7 @@ class _AllMovieScreenState extends State<AllMovieScreen> {
                       ),
                   ],
                 ),
-                bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
+                bottomNavigationBar: const CustomBottomNav(currentIndex: 0),
               ),
             ));
   }

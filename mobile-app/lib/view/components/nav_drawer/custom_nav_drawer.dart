@@ -111,38 +111,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           SizedBox(height: space),
                           buildMenuItem(
                             context,
-                            item: NavigationItem.myreelsScreen,
-                            text: MyStrings.myReels.tr,
-                            index: 22,
-                            icon: Icons.play_arrow_rounded,
-                            iconImage: MyImages.sideNameRentImage,
-                            isImage: true,
-                          ),
-                          SizedBox(height: space),
-                          buildMenuItem(
-                            context,
-                            item: NavigationItem.rentItemScreen,
-                            text: MyStrings.rentedItems.tr,
-                            index: 21,
-                            icon: Icons.play_arrow_rounded,
-                            iconImage: MyImages.sideNameRentImage,
-                            isImage: true,
-                          ),
-                          if (Get.find<ApiClient>().isWatchPartyEnable()) ...[
-                            SizedBox(height: space),
-                            buildMenuItem(
-                              context,
-                              item: NavigationItem.watchPartyHistoryScreen,
-                              text: MyStrings.watchParty,
-                              index: 5,
-                              icon: Icons.history,
-                              iconImage: MyImages.watchPartyImage,
-                              isImage: true,
-                            ),
-                          ],
-                          SizedBox(height: space),
-                          buildMenuItem(
-                            context,
                             item: NavigationItem.payment,
                             text: MyStrings.payment,
                             index: 6,
@@ -285,27 +253,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       bool isOk = isAuthorized();
       if (isOk) {
         Get.toNamed(RouteHelper.changePasswordScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (item == NavigationItem.watchPartyHistoryScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.watchPartyHistoryScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (item == NavigationItem.rentItemScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.rentItemScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (item == NavigationItem.myreelsScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.myreelsVideoScreen);
       } else {
         showErrorSnackbar();
       }

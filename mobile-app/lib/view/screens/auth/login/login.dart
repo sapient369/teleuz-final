@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: const CustomBottomNav(currentIndex: 4),
+        bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
         body: GetBuilder<LoginController>(
           builder: (controller) => SizedBox(
             height: MediaQuery.of(context).size.height,
