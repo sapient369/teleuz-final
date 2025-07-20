@@ -40,40 +40,51 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
         _onTap(index);
       },
       items: <BottomNavyBarItem>[
-        BottomNavyBarItem(icon: SvgPicture.asset(MyImages.homeIcon, height: 16, width: 16, color: widget.currentIndex == 0 ? MyColor.primaryColor : MyColor.colorWhite), title: Text(MyStrings.home.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText),
-        BottomNavyBarItem(icon: SvgPicture.asset(MyImages.allMovieIcon, height: 16, width: 16, color: widget.currentIndex == 1 ? MyColor.primaryColor : MyColor.colorWhite), title: Text(MyStrings.movie.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText),
-        BottomNavyBarItem(icon: SvgPicture.asset(MyImages.allTvSeriesIcon, height: 16, width: 16, color: widget.currentIndex == 2 ? MyColor.primaryColor : MyColor.colorWhite), title: Text(MyStrings.allSeries.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText),
-        BottomNavyBarItem(icon: Image.asset(MyImages.reelsImage, height: 16, width: 16, color: widget.currentIndex == 3 ? MyColor.primaryColor : MyColor.colorWhite), title: Text(MyStrings.reels.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText),
+        BottomNavyBarItem(
+            icon: SvgPicture.asset(MyImages.homeIcon,
+                height: 16,
+                width: 16,
+                color: widget.currentIndex == 0
+                    ? MyColor.primaryColor
+                    : MyColor.colorWhite),
+            title: Text(MyStrings.home.tr),
+            activeColor: MyColor.primaryColor,
+            textAlign: TextAlign.center,
+            inactiveColor: MyColor.primaryText),
         Get.find<ApiClient>().isAuthorizeUser()
-            ? BottomNavyBarItem(icon: SvgPicture.asset(MyImages.menuIcon, height: 16, width: 16, color: widget.currentIndex == 4 ? MyColor.primaryColor : MyColor.colorWhite), title: Text(MyStrings.menu.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText)
-            : BottomNavyBarItem(icon: const Icon(Icons.account_circle_rounded, color: MyColor.colorWhite), title: Text(MyStrings.login.tr), activeColor: MyColor.primaryColor, textAlign: TextAlign.center, inactiveColor: MyColor.primaryText),
+            ? BottomNavyBarItem(
+                icon: SvgPicture.asset(MyImages.menuIcon,
+                    height: 16,
+                    width: 16,
+                    color: widget.currentIndex == 1
+                        ? MyColor.primaryColor
+                        : MyColor.colorWhite),
+                title: Text(MyStrings.menu.tr),
+                activeColor: MyColor.primaryColor,
+                textAlign: TextAlign.center,
+                inactiveColor: MyColor.primaryText)
+            : BottomNavyBarItem(
+                icon: const Icon(Icons.account_circle_rounded,
+                    color: MyColor.colorWhite),
+                title: Text(MyStrings.login.tr),
+                activeColor: MyColor.primaryColor,
+                textAlign: TextAlign.center,
+                inactiveColor: MyColor.primaryText),
       ],
     );
   }
 
   void _onTap(int index) {
     if (index == 0) {
-      if (!(widget.currentIndex == 0)) {
+      if (widget.currentIndex != 0) {
         Get.offAllNamed(RouteHelper.homeScreen);
       }
     } else if (index == 1) {
-      if (!(widget.currentIndex == 1)) {
-        Get.offAllNamed(RouteHelper.allMovieScreen);
-      }
-    } else if (index == 2) {
-      if (!(widget.currentIndex == 2)) {
-        Get.offAllNamed(RouteHelper.allEpisodeScreen);
-      }
-    } else if (index == 3) {
-      if (!(widget.currentIndex == 3)) {
-        Get.offAllNamed(RouteHelper.reelsVideoScreen);
-      }
-    } else if (index == 4) {
       if (Get.find<ApiClient>().isAuthorizeUser()) {
-        printx('Tap $index');
         Scaffold.of(context).openDrawer();
+      } else {
+        Get.offAllNamed(RouteHelper.loginScreen);
       }
-      Get.find<ApiClient>().isAuthorizeUser() ? Scaffold.of(context).openDrawer() : Get.offAllNamed(RouteHelper.loginScreen);
     }
   }
 }
