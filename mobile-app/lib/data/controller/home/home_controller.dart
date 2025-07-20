@@ -13,7 +13,7 @@ import 'package:play_lab/data/model/dashboard/dashboard_response_model.dart';
 import 'package:play_lab/data/model/dashboard/user_subcription_response_model.dart';
 import 'package:play_lab/data/model/global/tournament/tournament_model.dart';
 import 'package:play_lab/data/model/global/response_model/response_model.dart';
-import 'package:play_lab/data/model/global/telivision/channel.dart';
+import 'package:play_lab/data/model/live_tv/live_tv_response_model.dart';
 import 'package:play_lab/data/model/global/telivision/telivision.dart';
 import 'package:play_lab/data/model/home/enum/enum.dart';
 import 'package:play_lab/data/model/home/pop_up_ads/Pop_up_ads_model.dart';
@@ -34,7 +34,7 @@ class HomeController extends GetxController {
   String sliderImagePath = '';
   List<Slider> sliderList = [];
 
-  List<Channel> televisionList = [];
+  List<Telivison> televisionList = [];
   String televisionImagePath = '';
 
   List<Featured> recentlyAddedList = [];
@@ -74,15 +74,21 @@ class HomeController extends GetxController {
   bool sliderLoading = true;
   bool isSearchBarVisible = false;
 
+  bool adultUnlocked = false;
+
   String? email;
   String? name;
   String? image;
 
   ProfileResponseModel profileResponseModel = ProfileResponseModel();
   Future<void> getAllData() async {
+    adultUnlocked = homeRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.adultUnlockedKey) ??
+        false;
     currency = homeRepo.apiClient.getCurrencyOrUsername(isCurrency: true);
     currencySym = homeRepo.apiClient.getCurrencyOrUsername(isSymbol: true);
     getDashBoardData();
+    fetchTvCategories();
     getPopUpAds();
     if (!isGuest()) {
       profileResponseModel = await homeRepo.loadProfileInfo();
@@ -101,7 +107,6 @@ class HomeController extends GetxController {
       DashBoardResponseModel responseModel = DashBoardResponseModel.fromJson(jsonDecode(model.responseJson));
       if (responseModel.data != null) {
         sliderImagePath = responseModel.data?.path?.landscape ?? '';
-        televisionImagePath = responseModel.data?.path?.television ?? '';
         singleBannerImagePath = responseModel.data?.path?.landscape ?? '';
         featuredMovieImagePath = responseModel.data?.path?.portrait ?? '';
         recentlyAddedImagePath = responseModel.data?.path?.portrait ?? '';
@@ -112,7 +117,6 @@ class HomeController extends GetxController {
         tournamentImagePath = responseModel.data?.path?.tournament ?? '';
 
         sliderList.clear();
-        televisionList.clear();
         featuredMovieList.clear();
         recentlyAddedList.clear();
         latestSeriesList.clear();
@@ -123,7 +127,6 @@ class HomeController extends GetxController {
         eventList.clear();
 
         sliderList.addAll(responseModel.data?.data?.sliders ?? []);
-        televisionList.addAll(responseModel.data?.data?.televisions?.data ?? []);
         featuredMovieList.addAll(responseModel.data?.data?.featured ?? []);
         recentlyAddedList.addAll(responseModel.data?.data?.recentlyAdded ?? []);
         latestSeriesList.addAll(responseModel.data?.data?.latestSeries ?? []);
@@ -137,6 +140,22 @@ class HomeController extends GetxController {
       updateLoadingStatus(LoadingEnum.all, false);
     }
     updateLoadingStatus(LoadingEnum.all, false);
+  }
+
+  Future<void> fetchTvCategories() async {
+    adultUnlocked = homeRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.adultUnlockedKey) ??
+        adultUnlocked;
+    updateLoadingStatus(LoadingEnum.liveTvLoading, true);
+    ResponseModel response = await homeRepo.getLiveTv();
+    if (response.statusCode == 200) {
+      LiveTvResponseModel model =
+          LiveTvResponseModel.fromJson(jsonDecode(response.responseJson));
+      televisionList.clear();
+      televisionList.addAll(model.data?.televisions?.data ?? []);
+      televisionImagePath = model.data?.imagePath ?? '';
+    }
+    updateLoadingStatus(LoadingEnum.liveTvLoading, false);
   }
 
   String popAdsUrl = '';
@@ -227,6 +246,13 @@ class HomeController extends GetxController {
         : value.isEmpty
             ? false
             : true;
+  }
+
+  void setAdultUnlocked(bool value) {
+    adultUnlocked = value;
+    homeRepo.apiClient.sharedPreferences
+        .setBool(SharedPreferenceHelper.adultUnlockedKey, value);
+    update();
   }
 
   void updateLoadingStatus(LoadingEnum loadingEnum, bool status) {
