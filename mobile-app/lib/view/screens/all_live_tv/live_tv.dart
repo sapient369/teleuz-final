@@ -5,6 +5,7 @@ import 'package:play_lab/view/components/buttons/category_button.dart';
 import 'package:play_lab/view/components/dialog/app_dialog.dart';
 import 'package:play_lab/view/components/dialog/login_dialog.dart';
 import 'package:play_lab/view/components/show_custom_snackbar.dart';
+import 'package:play_lab/view/components/custom_text_form_field.dart';
 import 'package:play_lab/view/screens/all_live_tv/widget/all_live_tv_shimmer/all_live_tv_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,10 +61,29 @@ class _AllLiveTvScreenState extends State<AllLiveTvScreen> {
             ? const AllLiveTvShimmer()
             : Padding(
                 padding: const EdgeInsets.only(right: 10),
-                child: ListView.builder(
-                  itemCount: controller.televisionList.length,
-                  itemBuilder: (context, index) {
-                    final telivision = controller.televisionList[index];
+                child: Column(
+                  children: [
+                    if (!controller.adultUnlocked &&
+                        controller.televisionList.any((e) => e.isAdult))
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: CategoryButton(
+                          text: MyStrings.unlockAdult,
+                          press: () {
+                            _showPinDialog(controller);
+                          },
+                        ),
+                      ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.televisionList
+                            .where((e) => !e.isAdult || controller.adultUnlocked)
+                            .length,
+                        itemBuilder: (context, index) {
+                          final visibleList = controller.televisionList
+                              .where((e) => !e.isAdult || controller.adultUnlocked)
+                              .toList();
+                          final telivision = visibleList[index];
                     final channelList = telivision.channels ?? [];
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: Dimensions.space15, vertical: Dimensions.space20),
@@ -75,7 +95,8 @@ class _AllLiveTvScreenState extends State<AllLiveTvScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('${telivision.name} Channels ', style: mulishBold.copyWith()),
-                              if (!controller.subcribeChannelList.contains(telivision.id.toString())) ...[
+                              if (double.tryParse(telivision.price ?? '0') != 0 &&
+                                  !controller.subcribeChannelList.contains(telivision.id.toString())) ...[
                                 CategoryButton(
                                   text: controller.isSubcribeLoading == telivision.id.toString() ? 'Loading..' : MyStrings.subscribeNow,
                                   press: () {
@@ -83,10 +104,10 @@ class _AllLiveTvScreenState extends State<AllLiveTvScreen> {
                                       AppDialog().subcribcritionAlert(
                                         context,
                                         () {
-                                          controller.subcribeNow(telivision);
-                                        },
-                                        msgText: "Are you sure to subscribe to this channel group?\nMonthly subscription price is ${controller.currencySym}${StringConverter.roundDoubleAndRemoveTrailingZero(telivision.price ?? '0')} ${controller.currency}",
-                                      );
+                                              controller.subcribeNow(telivision);
+                                            },
+                                            msgText: "Are you sure to subscribe to this channel group?\nMonthly subscription price is ${controller.currencySym}${StringConverter.roundDoubleAndRemoveTrailingZero(telivision.price ?? '0')} ${controller.currency}",
+                                          );
                                     } else {
                                       CustomSnackbar.showCustomSnackbar(errorList: [MyStrings.plsLoginAndSubscribeToWatch], msg: [], isError: true);
                                     }
@@ -105,10 +126,11 @@ class _AllLiveTvScreenState extends State<AllLiveTvScreen> {
                                 imageUrl: '${UrlContainer.baseUrl}${controller.televisionImagePath}/${channelList[i].image}',
                                 press: () {
                                   if (controller.repo.apiClient.isAuthorizeUser()) {
-                                    if (controller.subcribeChannelList.contains(telivision.id.toString())) {
+                                    if (double.tryParse(telivision.price ?? '0') == 0 ||
+                                        controller.subcribeChannelList.contains(telivision.id.toString())) {
                                       Get.toNamed(RouteHelper.liveTvDetailsScreen, arguments: channelList[i].id);
                                     } else {
-                                      CustomSnackbar.showCustomSnackbar(errorList: ["Please Subcribe to watch"], msg: [], isError: true);
+                                      CustomSnackbar.showCustomSnackbar(errorList: [MyStrings.plsSubscribeToWatch], msg: [], isError: true);
                                     }
                                   } else {
                                     showLoginDialog(context);
@@ -123,7 +145,27 @@ class _AllLiveTvScreenState extends State<AllLiveTvScreen> {
                   },
                 ),
               ),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  void _showPinDialog(LiveTvController controller) {
+    final pinController = TextEditingController();
+    Get.defaultDialog(
+      title: MyStrings.enterPin,
+      content: InputTextFieldWidget(
+        controller: pinController,
+        hintText: MyStrings.enterPin,
+        keyboardType: TextInputType.number,
+      ),
+      textConfirm: MyStrings.confirm,
+      onConfirm: () {
+        controller.setAdultUnlocked(true);
+        Get.back();
+      },
     );
   }
 }
