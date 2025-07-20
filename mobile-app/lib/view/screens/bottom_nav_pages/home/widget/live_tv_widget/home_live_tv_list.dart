@@ -15,7 +15,8 @@ import 'package:play_lab/view/components/dialog/login_dialog.dart';
 import 'package:play_lab/view/components/show_custom_snackbar.dart';
 import '../../../../../components/custom_text_form_field.dart';
 import '../../../../all_live_tv/widget/live_tv_grid_item/live_tv_grid_item.dart';
-import '../../shimmer/live_tv_shimmer.dart';
+import 'package:play_lab/view/screens/all_live_tv/widget/all_live_tv_shimmer/all_live_tv_shimmer.dart';
+import 'package:play_lab/core/utils/styles.dart';
 
 class HomeLiveTvList extends StatelessWidget {
   const HomeLiveTvList({super.key});
