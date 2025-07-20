@@ -1,0 +1,3 @@
+[07-Jul-2025 18:27:21 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\SiteController::videoList() in /home/tectif/p2p.smmfollow.uz/core/app/Http/Controllers/SiteController.php on line 731
+[07-Jul-2025 18:28:35 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\SiteController::videoList() in /home/tectif/p2p.smmfollow.uz/core/app/Http/Controllers/SiteController.php on line 731
+[07-Jul-2025 21:48:28 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/tectif/p2p.smmfollow.uz/core/routes/web.php on line 78
