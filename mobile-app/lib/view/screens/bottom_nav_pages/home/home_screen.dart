@@ -8,16 +8,13 @@ import 'package:play_lab/core/utils/url_container.dart';
 import 'package:play_lab/view/components/auth_image.dart';
 import 'package:play_lab/view/components/buttons/category_button.dart';
 import 'package:play_lab/view/components/image/my_image_widget.dart';
-import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/category_widget/category_widget.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/divider_section/divider_section.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/tournament/tournament_list_carousal.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/latest_trailer_widget/latest_trailer_widget.dart';
-import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/recently_added_widget/recently_added_widget.dart';
-import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/rent_items_widget/rent_items_widget.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/searchbar/searchBarWidget.dart';
-import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/show_more_row/show_more_widget.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/single_banner_widget/single_banner_widget.dart';
 import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/single_banner_widget/single_banner_widget_two.dart';
+import 'package:play_lab/view/screens/bottom_nav_pages/home/widget/live_tv_widget/home_live_tv_list.dart';
 import 'package:play_lab/view/will_pop_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +25,6 @@ import '../../../components/nav_drawer/custom_nav_drawer.dart';
 import 'package:play_lab/core/route/route.dart';
 import 'package:play_lab/core/utils/dimensions.dart';
 import 'package:play_lab/core/utils/my_color.dart';
-import 'package:play_lab/data/controller/category/category_controller/category_controller.dart';
 import 'package:play_lab/data/controller/home/home_controller.dart';
 import 'package:play_lab/data/controller/nav_controller/nav_drawer_controller.dart';
 import 'package:play_lab/data/repo/category_repo/category_repo/category_repo.dart';
@@ -81,8 +77,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   void initState() {
     Get.put(ApiClient(sharedPreferences: Get.find()));
     final homeRepo = Get.put(HomeRepo(apiClient: Get.find()));
-    Get.put(CategoryRepo(apiClient: Get.find()));
-    Get.put(CategoryController(repo: Get.find()));
     Get.put(NavDrawerRepo(apiClient: Get.find()));
     Get.put(NavDrawerController(sharedPreferences: Get.find()));
     final homeController = Get.put(HomeController(homeRepo: Get.find()));
@@ -100,8 +94,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       }
 
       homeController.getAllData();
-
-      Get.find<CategoryController>().fetchInitialCategoryData();
     });
   }
 
@@ -188,14 +180,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ShowMoreText(
-                                      headerText: MyStrings.liveTV,
-                                      press: () {
-                                        Get.toNamed(RouteHelper.allLiveTVScreen);
-                                      },
-                                    ),
+                                    Text(MyStrings.liveTV,
+                                        style: mulishBold.copyWith()),
                                     const SizedBox(height: Dimensions.spaceBetweenCategory),
-                                    const LiveTvWidget(),
+                                    const HomeLiveTvList(),
                                   ],
                                 )
                               ],
@@ -209,50 +197,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 ),
                                 const SizedBox(height: Dimensions.space10),
                                 const TournamentListCarousal(),
-                              ],
-                              GetBuilder<CategoryController>(builder: (catController) {
-                                return catController.categoryList.isNotEmpty
-                                    ? Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: Dimensions.spaceBetweenCategory + 5),
-                                          ShowMoreText(
-                                              headerText: MyStrings.category, isShowMoreVisible: false, press: () {}),
-                                          const SizedBox(height: Dimensions.spaceBetweenCategory + 5),
-                                          const CategoryWidget(),
-                                        ],
-                                      )
-                                    : const SizedBox.shrink();
-                              }),
-                              if (controller.recentlyAddedList.isNotEmpty) ...[
-                                Semantics(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: Dimensions.spaceBetweenCategory),
-                                      ShowMoreText(
-                                          headerText: MyStrings.recentlyAdded, isShowMoreVisible: false, press: () {}),
-                                      const SizedBox(height: Dimensions.spaceBetweenCategory),
-                                      const RecentlyAddedWidget(),
-                                    ],
-                                  ),
-                                )
-                              ],
-                              const DividerSection(),
-                              if (controller.rentList.isNotEmpty) ...[
-                                Semantics(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      ShowMoreText(
-                                          headerText: MyStrings.premiumItems.tr,
-                                          isShowMoreVisible: false,
-                                          press: () {}),
-                                      const SizedBox(height: Dimensions.spaceBetweenCategory),
-                                      const RentWidget(),
-                                    ],
-                                  ),
-                                )
                               ],
                             ],
                           ),

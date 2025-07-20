@@ -74,12 +74,17 @@ class HomeController extends GetxController {
   bool sliderLoading = true;
   bool isSearchBarVisible = false;
 
+  bool adultUnlocked = false;
+
   String? email;
   String? name;
   String? image;
 
   ProfileResponseModel profileResponseModel = ProfileResponseModel();
   Future<void> getAllData() async {
+    adultUnlocked = homeRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.adultUnlockedKey) ??
+        false;
     currency = homeRepo.apiClient.getCurrencyOrUsername(isCurrency: true);
     currencySym = homeRepo.apiClient.getCurrencyOrUsername(isSymbol: true);
     getDashBoardData();
@@ -138,6 +143,9 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchTvCategories() async {
+    adultUnlocked = homeRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.adultUnlockedKey) ??
+        adultUnlocked;
     updateLoadingStatus(LoadingEnum.liveTvLoading, true);
     ResponseModel response = await homeRepo.getLiveTv();
     if (response.statusCode == 200) {
@@ -238,6 +246,13 @@ class HomeController extends GetxController {
         : value.isEmpty
             ? false
             : true;
+  }
+
+  void setAdultUnlocked(bool value) {
+    adultUnlocked = value;
+    homeRepo.apiClient.sharedPreferences
+        .setBool(SharedPreferenceHelper.adultUnlockedKey, value);
+    update();
   }
 
   void updateLoadingStatus(LoadingEnum loadingEnum, bool status) {
