@@ -81,6 +81,7 @@ class UrlContainer {
   static const String getProfileEndPoint = 'api/user-info';
   static const String updateProfileEndPoint = 'api/profile-setting';
   static const String changePasswordEndPoint = 'api/change-password';
+  static const String unlockAdultEndPoint = 'api/adult-password';
 
   static const String deviceTokenEndPoint = 'api/add-device-token';
   static const String profileCompleteEndPoint = 'api/user-data-submit';

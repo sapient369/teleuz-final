@@ -34,4 +34,12 @@ class LiveTvRepo {
     final response = await apiClient.request(url, Method.getMethod, null, passHeader: true);
     return response;
   }
+
+  Future<ResponseModel> unlockAdult(String pin) async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.unlockAdultEndPoint}';
+    final params = {'pin': pin};
+    ResponseModel response =
+        await apiClient.request(url, Method.postMethod, params, passHeader: true);
+    return response;
+  }
 }

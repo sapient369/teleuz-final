@@ -96,7 +96,7 @@ class _AllEpisodeScreenState extends State<AllEpisodeScreen> {
                     ),
                   ],
                 ),
-                bottomNavigationBar: const CustomBottomNav(currentIndex: 2),
+                bottomNavigationBar: const CustomBottomNav(currentIndex: 0),
               ),
             ));
   }
