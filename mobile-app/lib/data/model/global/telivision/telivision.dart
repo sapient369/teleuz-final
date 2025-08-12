@@ -7,6 +7,7 @@ class Telivison {
   String? status; //
   String? createdAt;
   String? updatedAt;
+  bool isAdult;
   List<Channel>? channels;
 
   Telivison({
@@ -17,6 +18,7 @@ class Telivison {
     this.createdAt,
     this.updatedAt,
     this.channels,
+    this.isAdult = false,
   });
 
   factory Telivison.fromJson(Map<String, dynamic> json) => Telivison(
@@ -26,7 +28,13 @@ class Telivison {
         status: json["status"].toString(),
         createdAt: json["created_at"].toString(),
         updatedAt: json["updated_at"].toString(),
-        channels: json["channels"] == null ? [] : List<Channel>.from(json["channels"]!.map((x) => Channel.fromJson(x))),
+        isAdult: json["is_adult"] is bool
+            ? json["is_adult"] as bool
+            : (json["is_adult"] ?? 0).toString() == '1',
+        channels: json["channels"] == null
+            ? []
+            : List<Channel>.from(
+                json["channels"]!.map((x) => Channel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +44,7 @@ class Telivison {
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "is_adult": isAdult ? 1 : 0,
         "channels": channels == null ? [] : List<dynamic>.from(channels!.map((x) => x.toJson())),
       };
 }

@@ -54,6 +54,14 @@ class HomeRepo {
     return response;
   }
 
+  Future<ResponseModel> unlockAdult(String pin) async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.unlockAdultEndPoint}';
+    final params = {'pin': pin};
+    ResponseModel response =
+        await apiClient.request(url, Method.postMethod, params, passHeader: true);
+    return response;
+  }
+
   Future<dynamic> getRecentMovie() async {
     String url = '${UrlContainer.baseUrl}${UrlContainer.recentMovieEndPoint}';
     final response = await apiClient.request(url, Method.getMethod, null);

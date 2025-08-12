@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:play_lab/constants/my_strings.dart';
 import 'package:play_lab/core/helper/string_format_helper.dart';
+import 'package:play_lab/core/helper/shared_pref_helper.dart';
 import 'package:play_lab/core/route/route.dart';
 import 'package:play_lab/data/model/dashboard/user_subcription_response_model.dart';
 import 'package:play_lab/data/model/global/telivision/telivision.dart';
@@ -25,7 +26,10 @@ class LiveTvController extends GetxController implements GetxService {
   String currency = '';
   String currencySym = '';
 
+  bool adultUnlocked = false;
+
   void loadData() {
+    adultUnlocked = repo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.adultUnlockedKey) ?? false;
     getLiveTv();
     if (repo.apiClient.isAuthorizeUser()) {
       loadSubcriptionData();
@@ -106,6 +110,24 @@ class LiveTvController extends GetxController implements GetxService {
   void updateLoadingStatus(bool status) {
     isLoading = status;
     update();
+  }
+
+  void setAdultUnlocked(bool value) {
+    adultUnlocked = value;
+    repo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.adultUnlockedKey, value);
+    update();
+  }
+
+  Future<void> unlockAdultPin(String pin) async {
+    ResponseModel res = await repo.unlockAdult(pin);
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.responseJson);
+      if (data['status'] == 'success') {
+        setAdultUnlocked(true);
+        return;
+      }
+    }
+    CustomSnackbar.showCustomSnackbar(errorList: [MyStrings.invalidPin], msg: [], isError: true);
   }
 
   String isSubcribeLoading = '-1';

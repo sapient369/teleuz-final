@@ -50,6 +50,8 @@ class ProfileController extends GetxController implements GetxService {
   TextEditingController zipCodeController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController countryController = TextEditingController();
+  TextEditingController adultPinController = TextEditingController();
+  TextEditingController currentAdultPinController = TextEditingController();
 
   FocusNode userNameFocusNode = FocusNode();
   FocusNode firstNameFocusNode = FocusNode();
@@ -61,6 +63,8 @@ class ProfileController extends GetxController implements GetxService {
   FocusNode zipCodeFocusNode = FocusNode();
   FocusNode cityFocusNode = FocusNode();
   FocusNode countryFocusNode = FocusNode();
+  FocusNode adultPinFocusNode = FocusNode();
+  FocusNode currentAdultPinFocusNode = FocusNode();
 
   File? imageFile;
 
@@ -116,6 +120,8 @@ class ProfileController extends GetxController implements GetxService {
         country: countryName ?? '',
         mobileCode: mobileCode != null ? mobileCode!.replaceAll("[+]", "") : "",
         countryCode: countryCode ?? '',
+        adultPin: adultPinController.text,
+        currentAdultPin: currentAdultPinController.text,
       );
       bool b = await profileRepo.updateProfile(model, callFrom);
 

@@ -5,7 +5,6 @@ import 'package:play_lab/core/utils/url_container.dart';
 import 'package:play_lab/view/components/auth_image.dart';
 import 'package:play_lab/view/components/buttons/category_button.dart';
 import 'package:play_lab/view/components/buttons/rounded_button.dart';
-import 'package:play_lab/view/components/delete_account_dialog/delete_account_dialog.dart';
 import 'package:play_lab/view/components/image/custom_svg_picture.dart';
 import 'package:play_lab/view/components/image/my_image_widget.dart';
 import 'package:play_lab/view/components/show_custom_snackbar.dart';
@@ -95,51 +94,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           ],
                           buildMenuItem(
                             context,
-                            item: NavigationItem.subscribe,
-                            text: MyStrings.subscription,
-                            index: 4,
-                            icon: Icons.subscriptions_outlined,
-                          ),
-                          SizedBox(height: space),
-                          buildMenuItem(
-                            context,
                             item: NavigationItem.history,
                             text: MyStrings.history,
                             index: 5,
                             icon: Icons.history,
                           ),
-                          SizedBox(height: space),
-                          buildMenuItem(
-                            context,
-                            item: NavigationItem.myreelsScreen,
-                            text: MyStrings.myReels.tr,
-                            index: 22,
-                            icon: Icons.play_arrow_rounded,
-                            iconImage: MyImages.sideNameRentImage,
-                            isImage: true,
-                          ),
-                          SizedBox(height: space),
-                          buildMenuItem(
-                            context,
-                            item: NavigationItem.rentItemScreen,
-                            text: MyStrings.rentedItems.tr,
-                            index: 21,
-                            icon: Icons.play_arrow_rounded,
-                            iconImage: MyImages.sideNameRentImage,
-                            isImage: true,
-                          ),
-                          if (Get.find<ApiClient>().isWatchPartyEnable()) ...[
-                            SizedBox(height: space),
-                            buildMenuItem(
-                              context,
-                              item: NavigationItem.watchPartyHistoryScreen,
-                              text: MyStrings.watchParty,
-                              index: 5,
-                              icon: Icons.history,
-                              iconImage: MyImages.watchPartyImage,
-                              isImage: true,
-                            ),
-                          ],
                           SizedBox(height: space),
                           buildMenuItem(
                             context,
@@ -191,13 +150,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                             text: MyStrings.logout,
                             index: 8,
                             icon: Icons.logout,
-                          ),
-                          buildMenuItem(
-                            context,
-                            item: NavigationItem.delete,
-                            text: MyStrings.delete,
-                            index: 12,
-                            icon: Icons.delete_outline,
                           ),
                         ],
                       ),
@@ -288,34 +240,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       } else {
         showErrorSnackbar();
       }
-    } else if (item == NavigationItem.watchPartyHistoryScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.watchPartyHistoryScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (item == NavigationItem.rentItemScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.rentItemScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (item == NavigationItem.myreelsScreen) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.myreelsVideoScreen);
-      } else {
-        showErrorSnackbar();
-      }
-    } else if (index == 4) {
-      bool isOk = isAuthorized();
-      if (isOk) {
-        Get.toNamed(RouteHelper.subscribeScreen);
-      } else {
-        showErrorSnackbar();
-      }
     } else if (index == 5) {
       bool isOk = isAuthorized();
       if (isOk) {
@@ -347,8 +271,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       }
     } else if (index == 10) {
       Get.toNamed(RouteHelper.languageScreen);
-    } else if (index == 12) {
-      showDeleteDialog(context);
     }
     Scaffold.of(context).closeDrawer();
   }

@@ -32,6 +32,9 @@ class ProfileRepo {
       'zip': m.zip ?? '',
       'state': m.state ?? "",
       'city': m.city ?? '',
+      if (m.adultPin != null && m.adultPin!.isNotEmpty) 'adult_pin': m.adultPin!,
+      if (m.currentAdultPin != null && m.currentAdultPin!.isNotEmpty)
+        'current_adult_pin': m.currentAdultPin!,
     };
 
     request.headers.addAll(<String, String>{'Authorization': 'Bearer ${apiClient.token}'});
@@ -145,6 +148,10 @@ class ProfileRepo {
       'country_code': model.countryCode,
       'country': model.country,
       "mobile_code": model.mobileCode,
+      if (model.adultPin != null && model.adultPin!.isNotEmpty)
+        'adult_pin': model.adultPin,
+      if (model.currentAdultPin != null && model.currentAdultPin!.isNotEmpty)
+        'current_adult_pin': model.currentAdultPin,
     };
 
     return bodyFields;
