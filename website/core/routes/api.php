@@ -79,6 +79,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
                     Route::post('profile-setting', 'submitProfile');
                     Route::post('change-password', 'submitPassword');
+                    Route::post('adult-password', 'unlockAdult');
 
                     //KYC
                     Route::get('kyc-form', 'kycForm');

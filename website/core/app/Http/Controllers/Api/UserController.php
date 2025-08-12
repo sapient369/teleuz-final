@@ -359,6 +359,47 @@ class UserController extends Controller {
         }
     }
 
+    public function unlockAdult(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'pin' => 'required|digits:4',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'remark'  => 'validation_error',
+                'status'  => 'error',
+                'message' => ['error' => $validator->errors()->all()],
+            ]);
+        }
+
+        $user = auth()->user();
+        if (!$user->adult_password) {
+            $notify[] = 'No PIN set. Please set one in your profile.';
+            return response()->json([
+                'remark'  => 'pin_not_set',
+                'status'  => 'error',
+                'message' => ['error' => $notify],
+            ]);
+        }
+
+        if (!Hash::check($request->pin, $user->adult_password)) {
+            $notify[] = 'Invalid PIN';
+            return response()->json([
+                'remark'  => 'invalid_pin',
+                'status'  => 'error',
+                'message' => ['error' => $notify],
+            ]);
+        }
+
+        $notify[] = 'Access granted';
+
+        return response()->json([
+            'remark'  => 'pin_verified',
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+        ]);
+    }
+
     public function plans($type = null) {
         $plans = Plan::active();
         if ($type == 'app') {

@@ -14,8 +14,10 @@ class UserPostModel {
   final String? state;
   final String? zip;
   final String? city;
+  final String? adultPin;
+  final String? currentAdultPin;
 
-  UserPostModel({required this.firstName, required this.lastName, required this.mobile, required this.email, required this.username, required this.countryCode, required this.country, required this.mobileCode, required this.image, required this.address, required this.state, required this.zip, required this.city});
+  UserPostModel({required this.firstName, required this.lastName, required this.mobile, required this.email, required this.username, required this.countryCode, required this.country, required this.mobileCode, required this.image, required this.address, required this.state, required this.zip, required this.city, this.adultPin, this.currentAdultPin});
 
   factory UserPostModel.fromMap(Map<String, dynamic> map) {
     return UserPostModel(
@@ -32,6 +34,8 @@ class UserPostModel {
       state: map['state'] as String,
       zip: map['zip'] as String,
       city: map['city'] as String,
+      adultPin: map['adult_pin'] as String?,
+      currentAdultPin: map['current_adult_pin'] as String?,
     );
   }
 }
